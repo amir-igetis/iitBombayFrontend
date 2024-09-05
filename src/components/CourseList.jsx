@@ -61,13 +61,17 @@ const CourseList = () => {
     // DELETE OPERATION AHHHHHHHHHHHH LETS GO !!!!!!! 
     const handleDelete = (courseId) => {
         setSelectedCourseId(courseId);
+        const confirmDelete = window.confirm("Are you sure you want to delete this course?")
         const deleteCoursesById = async () => {
-            try {
-                await axios.delete(`http://localhost:8080/api/courses/${courseId}`);
-                setCourses(courses.filter((course) => courseId !== course.id));
-            } catch (error) {
-                console.log("Error deleting course : ", error);
-                alert("Error deleting the course");
+            if (confirmDelete) {
+                try {
+                    await axios.delete(`http://localhost:8080/api/courses/${courseId}`);
+                    setCourses(courses.filter((course) => courseId !== course.id));
+                    alert("Course deleted successfully!!")
+                } catch (error) {
+                    console.log("Error deleting course : ", error);
+                    alert("Error deleting the course");
+                }
             }
         };
         deleteCoursesById();
@@ -106,7 +110,7 @@ const CourseList = () => {
                                         className="bg-blue-100 border 
                                 hover:bg-blue-200 
                                 border-blue-900 border-b">
-                                        <td className="border-r border-blue-800 py-2 px-4 ">{course.title}</td>
+                                        <td className="border-r border-blue-800 py-2 px-4">{course.title}</td>
                                         <td className="border-r border-blue-800 py-2 px-4">{course.code}</td>
                                         <td className="py-2 px-4 flex space-x-2">
                                             <button onClick={() => handleSearch(course.id)}
