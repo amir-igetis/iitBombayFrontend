@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ../iitBombay    # Path to the Spring Boot project folder from iitBombayFrontend
+    container_name: spring-boot-backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - ../iitBombay/.env      # Path to the .env file in the Spring Boot folder
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: .    # Refers to the current iitBombayFrontend folder
+    container_name: vite-frontend
+    ports:
+      - "3000:3000"
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+
+  postgres:
+    image: postgres:13-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: iit_bombay
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: amir3583
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
